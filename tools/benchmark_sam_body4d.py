@@ -243,6 +243,7 @@ class Monitor:
                         "nvidia-smi",
                         "--query-gpu=utilization.gpu,memory.used,power.draw",
                         "--format=csv,noheader,nounits",
+                        "--id=0",
                     ],
                     text=True,
                     stderr=subprocess.DEVNULL,

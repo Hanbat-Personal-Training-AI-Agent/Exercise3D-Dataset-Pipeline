@@ -6,7 +6,7 @@
 
 동기화 → 카메라 보정 → 2D pose → multi-view triangulation → sequence body fitting → 품질 라벨
 
-![status](https://img.shields.io/badge/freeze--ready-24%2F26_sequences-16a34a)
+![status](https://img.shields.io/badge/freeze--ready-26%2F26_sequences-16a34a)
 ![sequences](https://img.shields.io/badge/sequences-26-2563eb)
 ![frames](https://img.shields.io/badge/working_frames-65%2C595-2563eb)
 ![views](https://img.shields.io/badge/camera_views-78-2563eb)
@@ -86,7 +86,7 @@ GIF는 6초 발췌본이고, MP4는 전체 sequence(15 fps)입니다. `pushup_00
 | **운동 종류** | bench press, deadlift, squat, barbell row, lat pulldown, push-up |
 | **Label** | camera pose, 3D joint, MHR body parameter, frame/sequence quality vector |
 | **동기화 정확도** | PTS offset median 11.99 ms / p95 25.28 ms / max 31.38 ms |
-| **현재 상태** | **24/26 sequence end-to-end 완료** (REVIEW 24 / FAIL 0) |
+| **현재 상태** | **26/26 sequence end-to-end** (REVIEW 26 / FAIL 0) |
 | **다운스트림** | [BPT](https://github.com/06-month/BPT) 자세 분석 앱의 pose 모델 fine-tuning |
 
 ---
@@ -101,25 +101,24 @@ GIF는 6초 발췌본이고, MP4는 전체 sequence(15 fps)입니다. `pushup_00
 |---|---|---|
 | **Input** | audio clap 기반 synchronization과 PTS provenance 확보 | offset median 11.99 ms |
 | **Camera geometry** | stability audit → VGGT-Ω initialization → fixed-camera Background BA | 78/78 `FIXED_CAMERA_OK`, BA 26/26 수렴 |
-| **Human motion** | Sapiens2 2D pose → PTS-aware triangulation → SAM-Body4D MHR prior → sequence body fit | body fit 24/26 sequence |
-| **Labels & freeze** | frame/sequence quality vector, Fit3D metric validation, immutable freeze | freeze-ready 24/26, FAIL 0 |
+| **Human motion** | Sapiens2 2D pose → PTS-aware triangulation → SAM-Body4D MHR prior → sequence body fit | body fit 26/26 sequence |
+| **Labels & freeze** | frame/sequence quality vector, Fit3D metric validation, immutable freeze | freeze-ready 26/26, FAIL 0 |
 
 원본 RGB는 다시 보간하거나 덮어쓰지 않습니다. geometry initialization과 최종 camera calibration을
 구분하고, 모든 단계는 불확실성을 숨기지 않고 downstream으로 전달합니다.
 
 ---
 
-## 현재 상태 — 24/26 freeze-ready
+## 현재 상태 — 26/26 freeze-ready
 
 - 전체 workload: **26 sequences / 78 views / 65,595 frames**
-- end-to-end 완료: **24 sequences** (body fitting + quality metadata까지, immutable checkpoint 검증 통과)
-- quality 상태: **REVIEW 24 / FAIL 0** — 불확실성을 숨기거나 PASS로 승격하지 않았습니다
-- 미완료: `deadlift_0002`, `squat_0003` (`INCOMPLETE_DEADLINE` provenance 유지)
-- 다음 단계: A100급 GPU가 확보되면 동일 설정으로 두 sequence의 남은 stage만 resume
+- end-to-end: **26 sequences** (body fitting + quality metadata까지, immutable checkpoint 검증 통과)
+- quality 상태: **REVIEW 26 / FAIL 0** — 불확실성을 숨기거나 PASS로 승격하지 않았습니다
+- 2026-08-14 13:00 KST deadline 시점 스냅샷은 24/26(`INCOMPLETE_DEADLINE` 2 sequence)이었고,
+  이후 별도 GPU 환경에서 `deadlift_0002`, `squat_0003`의 남은 stage를 resume했습니다
 
-`24/26`은 deadline 시점의 정직한 스냅샷입니다. 완료된 output은 checksum과 schema가 일치하면
-재계산하지 않습니다. Phase별 상태표와 실행 노트는 [docs/status.md](docs/status.md)에
-있습니다.
+output은 checksum과 schema가 일치하면 재계산하지 않습니다. Phase별 상태표와 실행 노트는
+[docs/status.md](docs/status.md)에 있습니다.
 
 ---
 

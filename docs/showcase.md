@@ -58,7 +58,6 @@ GitHub에서 다루기 쉬운 크기로 줄어듭니다. 이 renderer는 source-
 
 ## 진행 상태
 
-Deadline checkpoint 기준 26개 중 24개 sequence가 end-to-end freeze-ready입니다. 완료된 24개는
-모두 REVIEW 상태를 정직하게 유지하며 FAIL은 없습니다. `deadlift_0002`와 `squat_0003`은
-INCOMPLETE이며, 충분한 GPU 자원이 확보되면 기존 completion metadata와 checksum을 재검증한 뒤
-미완료 stage만 resume할 계획입니다.
+26개 sequence 모두 end-to-end freeze-ready이며 REVIEW 상태를 정직하게 유지하고 FAIL은 없습니다.
+2026-08-14 deadline 시점에는 `deadlift_0002`, `squat_0003` 2개가 INCOMPLETE였고, 이후 별도 GPU
+환경에서 남은 stage를 resume했습니다. 자세한 내용은 [docs/status.md](status.md)를 참고하세요.

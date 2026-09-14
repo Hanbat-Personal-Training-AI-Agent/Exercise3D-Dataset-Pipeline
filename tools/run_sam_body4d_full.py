@@ -389,9 +389,9 @@ def completion_status(output_dir: Path, expected_frames: int) -> dict[str, Any]:
         "numeric_prior_count": numeric_count,
         "checks": checks,
         "elapsed_wall_seconds": float(benchmark["elapsed_wall_seconds"]),
-        "peak_nvidia_vram_mib": float(benchmark["peak_nvidia_vram_mib"]),
-        "gpu_utilization_mean_pct": float(benchmark["gpu_utilization_mean_pct"]),
-        "power_mean_w": float(benchmark["power_mean_w"]),
+        "peak_nvidia_vram_mib": float(benchmark["peak_nvidia_vram_mib"] or 0.0),
+        "gpu_utilization_mean_pct": float(benchmark["gpu_utilization_mean_pct"] or 0.0),
+        "power_mean_w": float(benchmark["power_mean_w"] or 0.0),
     }
 
 

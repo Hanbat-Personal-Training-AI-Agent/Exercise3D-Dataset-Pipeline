@@ -13,6 +13,13 @@
   13:00 이후 서버 사용 가능 시 기존 autonomous path로 계속한다. Transfer는 Stage A critical 우선,
   Stage B intermediate, 마지막 incremental sync 순서이며 compression/hash/recompute/`--delete`는 금지한다.
 
+### Post-deadline resume — 2026-09-14
+
+`deadlift_0002`, `squat_0003`는 별도 GPU 서버에서 남은 stage(SAM Mode B → prior consolidation →
+body fit → quality)를 resume해 REVIEW에 도달했다. 최신 build
+`exercise3d-full-26-final-20260914021329`는 26 sequence REVIEW 26 / FAIL 0 / INCOMPLETE 0,
+`freeze_eligible=true`다. 상세 이슈/수정은 [process.md](process.md) 참고.
+
 - primary objective: correctness·provenance·identity consistency를 유지하면서 deadline까지
   end-to-end로 완결되고 freeze 가능한 sequence 수를 최대화
 - 2026-08-11 22:50 KST 기준 remaining wall-clock 62.17 h

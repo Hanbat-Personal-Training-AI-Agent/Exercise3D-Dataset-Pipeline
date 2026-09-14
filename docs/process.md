@@ -1693,3 +1693,23 @@ verdict는 보류한다.
 - Quality follower PID 2981075, predeadline checkpoint follower PID 2981156, 각 watchdog,
   deadline sentinel PID 2171153와 monitoring plane도 계속 실행했다. Transfer 준비로 signal/restart된
   process는 0이며, 13:00 KST deadline snapshot도 기존 sentinel에 맡긴다.
+
+## 2026-09-14 — 26/26 post-deadline resume
+
+- 별도 GPU 서버(A100 80GB ×2)에서 파이프라인을 재개해 `deadlift_0002`, `squat_0003`의 남은 stage를
+  실행했다. `squat_0003`은 Sapiens2 pose(3,822 crop)부터, `deadlift_0002`는 Sapiens cam1만
+  finalized된 상태였으므로 SAM Mode B부터 이어 두 sequence 모두 body fit·quality까지 REVIEW로
+  도달했다. FAIL은 0이다.
+- `tools/benchmark_sam_body4d.py`의 GPU telemetry sampler가 `nvidia-smi`를 GPU index 지정 없이
+  호출해, 다중-GPU 호스트에서는 출력이 여러 줄로 나와 매 sample마다 3-value unpack이 실패하던
+  결함을 발견했다. 단일-GPU 호스트에서는 드러나지 않던 결함이며 `--id=0`을 추가해 수정했다.
+  `tools/run_sam_body4d_full.py`의 `completion_status()`도 비어 있는 telemetry 값을 `float()`로
+  변환하다 죽는 경로가 있어, 정합성 검사와 무관한 optional field로 완화했다.
+- 단일-sequence resume 경로(`run_autonomous_generation.py` without `--wait-sapiens-pid`)는 camera별
+  `run_provenance.json`/`inference_run_provenance.json`을 자동으로 materialize하지 않아 export가
+  `source_dependency_identity_unavailable:FileNotFoundError`로 실패했다.
+  `tools/materialize_inference_provenance.py`를 두 sequence에 대해 별도로 실행한 뒤 최종 export를
+  다시 수행했다.
+- 최종 build `exercise3d-full-26-final-20260914021329`: 26 sequence, REVIEW 26 / FAIL 0 /
+  INCOMPLETE 0, 861 files / 1,004 MiB, `freeze_eligible=true`. Deadline snapshot build
+  (`exercise3d-deadline-20260814T1300KST`, REVIEW 24/INCOMPLETE 2)는 그대로 보존했다.
