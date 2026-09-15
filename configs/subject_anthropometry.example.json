@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "source": "describe how this was collected, e.g. user-reported height per subject",
+  "sequences": {
+    "barbellrow_0000": {"gender": "male", "height_cm": 0},
+    "barbellrow_0001": {"gender": "female", "height_cm": 0}
+  }
+}

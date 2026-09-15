@@ -84,7 +84,7 @@ GIF는 6초 발췌본이고, MP4는 전체 sequence(15 fps)입니다. `pushup_00
 | **Camera view** | 78 (`cam1` iPhone 16, `cam2` iPhone 16 Pro, `cam3` iPhone 17) |
 | **Frame** | working JPEG 65,595장, source 30/30/60 fps → working 30 fps |
 | **운동 종류** | bench press, deadlift, squat, barbell row, lat pulldown, push-up |
-| **Label** | camera pose, 3D joint, MHR body parameter, frame/sequence quality vector |
+| **Label** | camera pose, 3D joint, MHR body parameter, SMPL pose fit, frame/sequence quality vector |
 | **동기화 정확도** | PTS offset median 11.99 ms / p95 25.28 ms / max 31.38 ms |
 | **현재 상태** | **26/26 sequence end-to-end** (REVIEW 26 / FAIL 0) |
 | **다운스트림** | [BPT](https://github.com/06-month/BPT) 자세 분석 앱의 pose 모델 fine-tuning |
@@ -252,6 +252,7 @@ python tools/check_publication_safety.py
 | VGGT-Ω | camera/depth/point-map initialization 전용 (최종 camera로 직접 사용하지 않음) |
 | Sapiens2 Pose 5B | primary offline 2D pose teacher, official DETR person detector 사용 |
 | SAM 3D Body / SAM-Body4D | MHR body representation과 temporal prior (Mode B 기본, Mode C selective) |
+| SMPL | canonical triangulated 3D joint에 대한 독립 3D fit (`tools/fit_smpl_sequence.py`) |
 | Fit3D | Phase 12 정량 validation dataset 후보 |
 
 각 모델의 라이선스, 배포 조건, checkpoint 사용 권한은 upstream 정책을 따릅니다.

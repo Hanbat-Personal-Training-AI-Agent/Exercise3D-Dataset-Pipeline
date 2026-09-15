@@ -98,6 +98,11 @@ deadline sentinel은 expected 26-sequence list를 verifier에 별도 전달한�
   127 joint coordinate/global rotation, 204-d replayable parameter
 - sequence fit: canonical 3D/confidence, evidence code, geometry/prior residual, temporal fit,
   sequence shape/scale consensus와 별도 scale-invariant `S0`
+- SMPL fit: sequence당 shared `betas`(10), frame별 `global_orient`/`body_pose`/`transl`,
+  sequence당 arbitrary-unit→meter `scale`, frame별 joint RMSE. Canonical 3D joint 중 SMPL
+  kinematic tree와 직접 대응되는 14개 관절만 3D 제약으로 사용하고, 나머지(spine/collar/hand)는
+  temporal smoothness로만 채운다. Shape는 이 저장소 밖 별도 anthropometry 파일의 키로 보정하며
+  ([subject_anthropometry.md](subject_anthropometry.md)), 그 매핑 자체는 공개하지 않는다
 - quality: frame별 target/pose/SAM/triangulation/body component vector, categorical flag bitmask,
   PASS/REVIEW/FAIL. Calibrated accuracy probability나 합성 scalar score로 해석하지 않음
 

@@ -55,6 +55,8 @@ private 경로는 CLI 인자나 환경변수로만 주입합니다.
 | `verify_mhr_parameter_replay.py` | compact 204-d MHR parameter의 official model exact replay 검사 | ignored aggregate |
 | `fit_sequence_body.py` | geometry-dominant staged sequence body fit과 S0 | ignored private output |
 | `summarize_sam_body_runtime.py` | Mode A/B/C ratio와 best/expected/worst runtime 집계 | redacted aggregate |
+| `fit_smpl_sequence.py` | canonical 3D joint에 SMPL pose 3D fit (shape는 외부 anthropometry로 보정) | ignored private output |
+| `fit_smpl_all.py` | `fit_smpl_sequence.py`를 subject-anthropometry 파일 기준 전체 sequence에 실행 | ignored private output |
 
 ## 5. Quality / export / validation (Phase 11–13)
 

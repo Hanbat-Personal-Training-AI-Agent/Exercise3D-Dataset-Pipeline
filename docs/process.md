@@ -1713,3 +1713,26 @@ verdict는 보류한다.
 - 최종 build `exercise3d-full-26-final-20260914021329`: 26 sequence, REVIEW 26 / FAIL 0 /
   INCOMPLETE 0, 861 files / 1,004 MiB, `freeze_eligible=true`. Deadline snapshot build
   (`exercise3d-deadline-20260814T1300KST`, REVIEW 24/INCOMPLETE 2)는 그대로 보존했다.
+
+## 2026-09-15 — SMPL fit layer 추가
+
+- `tools/fit_smpl_sequence.py`, `tools/fit_smpl_all.py`를 추가했다. MHR과 별개로 canonical
+  triangulated 3D joint에 SMPL pose를 직접 3D fit한다 (SMPLify-3D 방식).
+- shape(beta)는 외부 anthropometry 파일의 실측 키로 먼저 보정 후 고정한다(타겟 대비 오차
+  1 cm 이내). canonical 26 joint 중 SMPL kinematic tree와 직접 대응되는 14개 관절만 3D 제약으로
+  쓰고, 대응점 없는 spine/collar/hand는 temporal smoothness(인접 frame body_pose 차이 penalty)로
+  채운다 — MHR 결과를 그대로 리타겟하지 않았다: MHR과 SMPL은 서로 다른 kinematic tree라 검증된
+  관절 매핑이 없고, 억지 매핑은 왜곡을 만든다.
+  삼각측량 3D는 sequence-local arbitrary 단위이므로 arbitrary-unit→meter scale factor를 frame
+  pose와 함께 sequence당 하나씩 공동 최적화했다(가정하지 않음).
+  A100 2장에 sequence를 나눠 26개 전부 실행, median joint RMSE 4.2 mm(범위 2.3–7.2 mm)다.
+- SMPL 모델 파일(`SMPL_python_v.1.1.0.zip`, MPI 라이선스 gated)은 이 저장소에 없다. 원본은
+  chumpy 객체를 포함해 최신 numpy와 호환이 안 돼, 별도 Python 3.10/numpy 1.23/chumpy 0.70
+  환경에서 1회성으로 순수 numpy pickle(`SMPL_{GENDER}.pkl`)로 변환한 뒤 `smplx` 라이브러리로
+  로딩했다.
+- sequence별 성별/키 매핑은 commit하지 않는다 — `docs/design/dataset_schema.md`의 "별도
+  provenance 제공 시에만 subject-level 정보 추가" 예외에 해당하지만, public repo가 아니라
+  private dataset root 바깥의 별도 파일로만 유지한다. 상세: `docs/design/subject_anthropometry.md`,
+  `configs/subject_anthropometry.example.json`.
+- 기존 26/26 freeze build(`exercise3d-full-26-final-20260914021329`)는 건드리지 않았다. SMPL
+  출력(`outputs/smpl_fit_full/`)은 별도 private artifact로 관리한다.

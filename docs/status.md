@@ -99,3 +99,22 @@ REVIEW에 도달했습니다. resume 중 발견/수정한 이슈는 [process.md]
 parameter와 source PTS를 보존하고, Phase 9는 triangulated geometry를 dominant observation으로 두는
 staged fit만 허용하며, private export는 source RGB 없이 stage payload의 byte equality와 SHA-256,
 PASS/REVIEW/FAIL/INCOMPLETE 상태를 versioned manifest에 기록합니다.
+
+## SMPL fit layer (2026-09-15 추가)
+
+MHR과 별개로, canonical triangulated 3D joint에 직접 SMPL pose를 3D fit했습니다
+(`tools/fit_smpl_sequence.py`). 기존 26/26 freeze build는 건드리지 않고 별도 private
+output(`outputs/smpl_fit_full/`)으로 관리합니다.
+
+- shape(beta)는 sequence별 실측 키(외부 anthropometry 파일, 이 저장소에는 없음)로 먼저
+  보정한 뒤 고정합니다. 대상 키 대비 fit된 모델 키 오차 1 cm 이내.
+- canonical 26 joint 중 SMPL kinematic tree와 직접 대응되는 14개 관절(pelvis/hip/knee/
+  ankle/shoulder/elbow/wrist/neck, nose는 약한 가중치)만 3D 제약으로 사용합니다.
+  spine/collar/hand는 대응점이 없어 temporal smoothness로만 채웁니다.
+- 삼각측량 3D는 sequence-local arbitrary 단위이므로, arbitrary-unit→meter scale factor를
+  frame pose와 함께 sequence당 하나씩 공동 최적화합니다(가정하지 않음).
+- 26 sequence 전체 median joint RMSE 4.2 mm (범위 2.3–7.2 mm).
+- MHR 파라미터를 그대로 SMPL로 리타겟하지는 않았습니다 — 두 모델의 kinematic tree가 달라
+  검증된 관절 매핑이 없고, 억지 매핑은 오히려 왜곡을 만듭니다.
+- `not_ground_truth=true`. sequence→subject 매핑(키/성별)은 공개하지 않습니다
+  ([subject_anthropometry.md](design/subject_anthropometry.md)).
